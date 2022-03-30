@@ -18,8 +18,10 @@ _Endpoint API needed to call the service_
 
 _Key needed when calling the service_
 
+Once you have the feature setup, you can deploy the [Azure Function](https://github.com/Spucelik/SummarizeDocumentAzureFunction).
+
 ## Power Automate
-The core of solution resides in Power Automate.  Activities can be configured to process the document and OCR and extract the text needed to summarize the document.
+The core of solution resides in the [Power Automate solution](https://github.com/Spucelik/SummarizeDocuments/blob/df6ad85d32552144744e8637be192539c9761a5d/SummarizeDocumentsPowerAutomateSolution.zip).  Activities can be configured to process the document and OCR and extract the text needed to summarize the document.
 
 ![Power Automate](/images/4-PowerAutomate.png)
 
