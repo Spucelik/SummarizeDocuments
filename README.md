@@ -18,3 +18,55 @@ _Endpoint API needed to call the service_
 
 _Key needed when calling the service_
 
+## Power Automate
+The core of solution resides in Power Automate.  Activities can be configured to process the document and OCR and extract the text needed to summarize the document.
+
+![Power Automate](/images/4-PowerAutomate.png)
+
+_PowerAutomate core activities_
+
+To accomplish there are 2 main steps that need to be configured in Power Automate:
+1.	Recognize Text In Image – use AI Builder in Power Automate to train a model that will “Extract all the text in photos and PDF Documents (OCR).  This will extract text in PDF (Image and text) documents which is what we see the most. 
+
+    ![Power Automate](/images/5-PowerAutomate.png)
+
+2.	HTTP call to an Azure function – The summarization API does not have a user friendly interface so I created an Azure function that will conduct all the processing necessary and returns the summary of the document.
+
+## Putting it all together
+Now that we have the results from AI Builder, we can send this to the Azure Function for processing.
+
+### Send the contents of the file to AI Builder
+
+![Power Automate](/images/6-PowerAutomate.png)
+
+### Edit the OCRed text
+
+The result of the AI Builder activity is a JSON string that needs to be parsed.  Ultimately what were looking for is the “text” attribute in the JSON file.  This will get appended to our variable as we loop through the entire JSON output.
+
+![Power Automate](/images/7-JSON.png)
+
+![Power Automate](/images/8-PowerAutomate.png)
+
+_Loop through the JSON file extracting the “text” attribute_
+
+### Deploy the Azure function
+As part of this solution, I have created an Azure function that will need to be deployed to the resource group created earlier.  Download the Visual Studio solution from [GitHub](https://github.com/Spucelik/SummarizeDocumentAzureFunction) and update the AzureKeyCredential with a valid Key from the [Cognitive Services Text Analytics](https://portal.azure.com/#create/Microsoft.CognitiveServicesTextAnalytics) feature you created earlier.
+
+![Text Analytics](/images/9-TextAnalytics.png)
+
+Build and deploy the Azure function to the resource group created above.  This will provide you with the endpoint URL need to make the HTTP call in Power Automate.
+
+![Power Automate](/images/10-HTTP.png)
+
+### Call the Azure Function
+Now that you have the Azure function deployed, we have everything configured to send the extracted text to the summarization API for processing.
+
+![Power Automate](/images/11-HTTP.png)
+
+Once you have the results back, update the library.
+
+![Power Automate](/images/12-PowerAutomate.png)
+
+The resulting text is then displayed in the library for users to view and search.
+
+![Power Automate](/images/13-Library.png)
